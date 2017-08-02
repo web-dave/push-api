@@ -1,0 +1,22 @@
+{
+  "name": "push-api",
+  "version": "0.0.1",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "private": true,
+  "dependencies": {
+    "base-64": "^0.1.0",
+    "body-parser": "^1.16.1",
+    "bookmonkey-api": "^2.0.3",
+    "core-js": "^2.4.1",
+    "cors": "^2.8.1",
+    "cron": "^1.2.1",
+    "express": "^4.14.1",
+    "morgan": "^1.8.1",
+    "web-push": "^3.2.2",
+    "winston": "^2.3.1",
+    "yargs": "^7.0.1"
+  }
+}
