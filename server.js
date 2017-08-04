@@ -2,6 +2,7 @@
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
+var userList = {};
 
 var bodyParser = require('body-parser');
 app.use(express.static(__dirname));
@@ -75,6 +76,7 @@ app.post('/webpush', function (req, res, next) {
     if (arrayObjectIndexOf(pushSubscriptions, req.body.subscription.endpoint, 'endpoint') == -1) {
       pushSubscriptions.push(req.body.subscription);
       activeUsers.push(req.body.user);
+      userList[req.body.user] = req.body.subscription;
       subscriptionIndex = arrayObjectIndexOf(pushSubscriptions, req.body.subscription.endpoint, 'endpoint');
       logger.info('Subscription registered: ' + req.body.subscription.endpoint + ' at ' + subscriptionIndex);
     } else {
@@ -98,6 +100,7 @@ app.post('/webpush', function (req, res, next) {
     if (subscriptionIndex >= 0) {
       pushSubscriptions.splice(subscriptionIndex, 1);
       activeUsers.splice(subscriptionIndex, 1);
+      userList.splice(subscriptionIndex, 1);
 
       logger.info('Subscription unregistered: ' + req.body.subscription.endpoint);
     } else {
@@ -169,12 +172,12 @@ app.post('/msg', function (req, res, next) {
     recivers = activeUsers;
   }
     recivers.map(function (reciver) {
+      
+      // sendNotification(userList[reciver], JSON.stringify(notificationData));
 
       pushSubscriptions.forEach(function (item) {
         sendNotification(item, JSON.stringify(notificationData));
       });
-      // var item = pushSubscriptions[activeUsers.indexOf(reciver)];
-      // sendNotification(item, JSON.stringify(notificationData));
     });
   res.send({
     text: 'Web push send to ' + recivers.length + ' subscribers!',
